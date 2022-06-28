@@ -1,0 +1,25 @@
+<?php return array (
+  'parameters' => 
+  array (
+    'database_host' => '127.0.0.1',
+    'database_port' => '',
+    'database_name' => 'prestadatabase',
+    'database_user' => 'root',
+    'database_password' => 'LaGrandeBraderie2021!',
+    'database_prefix' => 'ps_',
+    'database_engine' => 'InnoDB',
+    'mailer_transport' => 'smtp',
+    'mailer_host' => '127.0.0.1',
+    'mailer_user' => NULL,
+    'mailer_password' => NULL,
+    'secret' => 'eRC8abnQpKGGIDnmC5ZOOBWV64z23946rMimninXghqpDfXpGpBzF2uqK6RnRNF4',
+    'ps_caching' => 'CacheMemcache',
+    'ps_cache_enable' => false,
+    'ps_creation_date' => '2022-06-22',
+    'locale' => 'fr-FR',
+    'use_debug_toolbar' => true,
+    'cookie_key' => 'iHKa0FvBdXDWcyIMONtxXuDKVRHXA8tdj8VhQsXP7wFGb6De7UJi8TcHU8oXrneh',
+    'cookie_iv' => 'yIrTqW2UF47vmhqyJXsdWpupM2POVhIv',
+    'new_cookie_key' => 'def00000f42ca87c17bdda3441dac8859e2db11906cabb2b053d127d6433deeb67ce3798821a703d62bab66145c86566a847f87a2582536707e5be15247108352afaccb2',
+  ),
+);
