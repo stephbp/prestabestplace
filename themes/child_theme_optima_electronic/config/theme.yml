@@ -1,0 +1,6 @@
+parent: theme_optima_electronic
+name: child_theme_optima_electronic
+display_name: Child theme of theme_optima_electronic's theme
+version: 1.0.0
+assets:
+  use_parent_assets: false
