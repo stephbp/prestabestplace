@@ -1,4 +1,15 @@
+#UNTRACKING FILE (TO PREVENT FROM COMMITING)
+#git update-index --skip-worktree INSTALL.txt
+#git ls-files -v . | findstr "^S"
+#git update-index --no-skip-worktree INSTALL.txt
+
+#UNTRACKING DIRECTORY (TO PREVENT FROM COMMITING)
+#git ls-files -z Backup_database/ | xargs -0 git update-index --skip-worktree
+#git ls-files -v . | findstr "^S"
+#git ls-files -z Backup_database/ | xargs -0 git update-index --no-skip-worktree
+
 INSTALL.txt
 Backup_database/
-autoload.php
-yaml/
+app/config/parameters.php
+var/cache/prod/FrontContainer.php
+var/cache/prod/ContainerMzzsuux/appProdProjectContainer.php
