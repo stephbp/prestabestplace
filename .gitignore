@@ -13,3 +13,5 @@ Backup_database/
 app/config/parameters.php
 var/cache/prod/FrontContainer.php
 var/cache/prod/ContainerMzzsuux/appProdProjectContainer.php
+yaml/
+var/logs/
