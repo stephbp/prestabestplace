@@ -15,4 +15,5 @@ var/cache/prod/FrontContainer.php
 var/cache/prod/ContainerMzzsuux/appProdProjectContainer.php
 yaml/
 var/logs/
-var/cache/prod/
+var/cache/prod/appParameters.php
+.htaccess
