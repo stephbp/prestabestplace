@@ -34,6 +34,8 @@ class vanillapayvalidationModuleFrontController extends ModuleFrontController
      */
     public function postProcess()
     {
+        
+        
         $pusher = new Pusher("cc4f5acb1e289d9a3449", "7669ab34e84ab43a5280", "55320", array('cluster' => 'mt1'));
         $encrypteur = new Crypt_TripleDES();
         $encrypteur->setKey(Configuration::get('ARYARYNET_CLIENT_PUBLIC_KEY'));
@@ -43,23 +45,12 @@ class vanillapayvalidationModuleFrontController extends ModuleFrontController
         $id_paiement = $decrypteur->decrypt($id_paiement_crypter);
         $paramstkn = array('client_id' => Configuration::get('ARYARYNET_CLIENT_ID'), 'client_secret' => Configuration::get('ARYARYNET_CLIENT_SECRET'), 'grant_type' => 'client_credentials');
         $json = json_decode($this->curl("https://pro.ariarynet.com/oauth/v2/token", $paramstkn));
-
-        if (Configuration::get('ARYARYNET_HEXA') == 1) {
-            $resultat = $decrypteur->decrypt(hex2bin(Tools::getValue("resultat")));
-            $idpanier = $decrypteur->decrypt(hex2bin(Tools::getValue("idpanier")));
-            $montant = $decrypteur->decrypt(hex2bin(Tools::getValue("montant")));
-            $reference = $decrypteur->decrypt(hex2bin(Tools::getValue("ref_int")));
-            $reference_arn = $decrypteur->decrypt(hex2bin(Tools::getValue("ref_arn")));
-            $code_arn = $decrypteur->decrypt(hex2bin(Tools::getValue("code_arn")));
-        } else {
-            $resultat = $decrypteur->decrypt(Tools::getValue("resultat"));
-            $idpanier = $decrypteur->decrypt(Tools::getValue("idpanier"));
-            $montant = $decrypteur->decrypt(Tools::getValue("montant"));
-            $reference = $decrypteur->decrypt(Tools::getValue("ref_int"));
-            $reference_arn = $decrypteur->decrypt(Tools::getValue("ref_arn"));
-            $code_arn = $decrypteur->decrypt(Tools::getValue("code_arn"));
-        }
-
+        $resultat = $decrypteur->decrypt(Tools::getValue("resultat"));
+        $idpanier = $decrypteur->decrypt(Tools::getValue("idpanier"));
+        $montant = $decrypteur->decrypt(Tools::getValue("montant"));
+        $reference = $decrypteur->decrypt(Tools::getValue("ref_int"));
+        $reference_arn = $decrypteur->decrypt(Tools::getValue("ref_arn"));
+        $code_arn = $decrypteur->decrypt(Tools::getValue("code_arn"));
         $cart = new Cart($idpanier);
         $customer = new Customer($cart->id_customer);
         $ariarynet = new AriaryNet();

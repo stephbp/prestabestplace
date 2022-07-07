@@ -58,12 +58,8 @@ class AriaryNet extends PaymentModule
         $this->description = $this->l('Accepts online payments by mobile money (Airtel Money, MVola, Orange Money) and by e-voucher Ariary.Net.');
         $this->confirmUninstall = $this->l('Are you sure you want to delete your details?');
 
-
         $this->page = basename(__FILE__, '.php');
-
-//        if (self::isInstalled($this->name)) {
-            $this->loadDefaults();
-//        }
+        $this->loadDefaults();
     }
 
     public function getnom() {
@@ -292,7 +288,6 @@ class AriaryNet extends PaymentModule
         //get ARIARYNET access token
         if ($this->isAriaryNetAvailable()) {
             $params = array('client_id' => $this->arn_client_id, 'client_secret' => $this->arn_client_secret, 'grant_type' => $this->arn_grant_type);
-            //pro.ariary.net/oauth/v2/token
             
             $json = json_decode($this->arn_tools->curl($this->plateforme . "oauth/v2/token", $params));
             
@@ -331,9 +326,12 @@ class AriaryNet extends PaymentModule
             $protocol_link = $this->usingSecureMode() ? 'https://' : 'http://';
             $protocol_link .= htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8') . __PS_BASE_URI__;
 
-            $params = array('site_url' => Configuration::get('ARYARYNET_SITE_URL'), 'params' => $params_crypter);
-            
-            $json = $this->arn_tools->curl($this->plateforme . "api/paiements", $params, $headers);
+            // STEPHANE > METTRE UN TRIM, C'EST NECESSAIRE
+            $protocol_link = trim($protocol_link, '/');
+
+			// STEPHANE > UTILISER UNE VALEUR DYNAMIQUE, C'EST AUSSI NECESSAIRE
+            $params = array('site_url' => $protocol_link, 'params' => $params_crypter);
+            $json = $this->arn_tools->curl($this->plateforme . "api/paiements", $params, $headers);  // *****************************************************
             
             $id_paiement = 0;
             if (isset($json) && $json) $id_paiement = $this->decrypteur->decrypt($json);
@@ -361,7 +359,6 @@ class AriaryNet extends PaymentModule
         if ($this->isAriaryNetAvailable()) {
 
             $params = array('client_id' => $this->arn_client_id, 'client_secret' => $this->arn_client_secret, 'grant_type' => $this->arn_grant_type);
-            //pro.ariary.net/oauth/v2/token
 
             $json = json_decode($this->arn_tools->curl($this->plateforme . "oauth/v2/token", $params));
 
@@ -401,9 +398,12 @@ class AriaryNet extends PaymentModule
             $protocol_link = $this->usingSecureMode() ? 'https://' : 'http://';
             $protocol_link .= htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8') . __PS_BASE_URI__;
 
-            $params = array('site_url' => Configuration::get('ARYARYNET_SITE_URL'), 'params' => $params_crypter);
-            
-            $json = $this->arn_tools->curl($this->plateforme . "api/paiements", $params, $headers);  
+            // MAHEFA > METTRE UN TRIM, C'EST NECESSAIRE
+            $protocol_link = trim($protocol_link, '/');
+
+            // MAHEFA > UTILISER UNE VALEUR DYNAMIQUE, C'EST AUSSI NECESSAIRE
+            $params = array('site_url' => $protocol_link, 'params' => $params_crypter);
+            $json = $this->arn_tools->curl($this->plateforme . "api/paiements", $params, $headers);  // *****************************************************
             
             $id_paiement = 0;
             if (isset($json) && $json) $id_paiement = $this->decrypteur->decrypt($json);
@@ -425,7 +425,7 @@ class AriaryNet extends PaymentModule
     {
         if (isset($_SERVER['HTTPS']))
             return ($_SERVER['HTTPS'] == 1 || Tools::strtolower($_SERVER['HTTPS']) == 'on');
-        // $_SERVER['SSL'] exists only in some specific configuration
+        
         if (isset($_SERVER['SSL']))
             return ($_SERVER['SSL'] == 1 || Tools::strtolower($_SERVER['SSL']) == 'on');
 
