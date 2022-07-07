@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<module>
+    <name>vanillapay</name>
+    <displayName><![CDATA[Vanilla Pay]]></displayName>
+    <version><![CDATA[0.1.0]]></version>
+    <description><![CDATA[Accepts online payments by mobile money (Airtel Money, MVola, Orange Money) and by e-voucher Ariary.Net.]]></description>
+    <author><![CDATA[Vanilla Pay]]></author>
+    <tab><![CDATA[payment_gateways]]></tab>
+    <is_configurable>1</is_configurable>
+    <need_instance>1</need_instance>
+	<limited_countries></limited_countries>
+</module>

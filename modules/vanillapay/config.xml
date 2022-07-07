@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<module>
+    <name>hhpayment</name>
+    <displayName><![CDATA[HH Payment]]></displayName>
+    <version><![CDATA[0.1.0]]></version>
+    <description><![CDATA[HH sample Payment for PS 1.7]]></description>
+    <author><![CDATA[hhennes]]></author>
+    <tab><![CDATA[payment_gateways]]></tab>
+    <is_configurable>1</is_configurable>
+    <need_instance>1</need_instance>
+	<limited_countries></limited_countries>
+</module>
