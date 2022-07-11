@@ -39,7 +39,7 @@ class vanillapay extends PaymentModule
         $this->author    = 'Vanilla Pay';
         $this->name      = 'vanillapay';
         $this->tab       = 'payment_gateways';
-        $this->version   = '0.1.0';
+        $this->version   = '1.1.0';
         $this->bootstrap = true;
         parent::__construct();
 
@@ -49,15 +49,15 @@ class vanillapay extends PaymentModule
 
     public function install()
     {
-        if (!parent::install() 
+        if (!parent::install()
             || !$this->registerHook('paymentOptions')
             || !$this->registerHook('paymentReturn')
-            ) {
+        ) {
             return false;
         }
         return true;
     }
-    
+
     /**
      * Uninstall this module and remove it from all hooks
      *
@@ -70,7 +70,7 @@ class vanillapay extends PaymentModule
 
     /**
      * Affichage du paiement dans le checkout
-     * PS 17 
+     * PS 17
      * @param type $params
      * @return type
      */
@@ -82,7 +82,7 @@ class vanillapay extends PaymentModule
 
         //Paiement Standard sans passerelle
         $standardPayment = new PaymentOption();
-        
+
         //Inputs supplémentaires (utilisé idéalement pour des champs cachés )
         $inputs = [
             [
@@ -98,24 +98,24 @@ class vanillapay extends PaymentModule
         ];
         //var_dump($this->context->link->getModuleLink($this->name, 'api', array(), true));
         $standardPayment->setModuleName($this->name)
-                //Logo de paiement
-                ->setLogo($this->context->link->getBaseLink().'/modules/vanillapay/views/img/logo.png')
-                ->setInputs($inputs)
-                //->setBinary() Utilisé si une éxécution de binaire est nécessaires ( module atos par ex )
-                //Texte de description
-                ->setCallToActionText($this->l('Vanilla Pay'))
-                ->setAction($this->context->link->getModuleLink($this->name, 'api', array(), true))
-                //Texte informatif supplémentaire
-                ->setAdditionalInformation($this->fetch('module:vanillapay/views/templates/hook/displayPayment.tpl'));
+            //Logo de paiement
+                        ->setLogo($this->context->link->getBaseLink().'/modules/vanillapay/views/img/logo.png')
+                        ->setInputs($inputs)
+            //->setBinary() Utilisé si une éxécution de binaire est nécessaires ( module atos par ex )
+            //Texte de description
+                        ->setCallToActionText($this->l('Vanilla Pay'))
+                        ->setAction($this->context->link->getModuleLink($this->name, 'api', array(), true))
+            //Texte informatif supplémentaire
+                        ->setAdditionalInformation($this->fetch('module:vanillapay/views/templates/hook/displayPayment.tpl'));
 
-        
+
         //Paiement API type bancaire
         //Variables pour paiement API
         $this->smarty->assign(
-                $this->getPaymentApiVars()
+            $this->getPaymentApiVars()
         );
 
-        
+
         return [$standardPayment];
     }
 
@@ -126,30 +126,30 @@ class vanillapay extends PaymentModule
     public function getPaymentApiVars()
     {
         return  [
-             'arn_client_id' => Configuration::get('ARYARYNET_CLIENT_ID'),
-             'arn_client_secret' => Configuration::get('ARYARYNET_CLIENT_SECRET'),
-             'arn_client_private_key' => Configuration::get('ARYARYNET_CLIENT_PRIVATE_KEY'),
-             'arn_client_public_key' => Configuration::get('ARYARYNET_CLIENT_PUBLIC_KEY'),
-             'id_cart' => $this->context->cart->id,
-             'cart_total' =>  $this->context->cart->getOrderTotal(true, Cart::BOTH),
-             'id_customer' => $this->context->cart->id_customer,
+            'arn_client_id' => Configuration::get('ARYARYNET_CLIENT_ID'),
+            'arn_client_secret' => Configuration::get('ARYARYNET_CLIENT_SECRET'),
+            'arn_client_private_key' => Configuration::get('ARYARYNET_CLIENT_PRIVATE_KEY'),
+            'arn_client_public_key' => Configuration::get('ARYARYNET_CLIENT_PUBLIC_KEY'),
+            'id_cart' => $this->context->cart->id,
+            'cart_total' =>  $this->context->cart->getOrderTotal(true, Cart::BOTH),
+            'id_customer' => $this->context->cart->id_customer,
         ];
     }
-    
+
     /**
      * Affichage du message de confirmation de la commande
      * @param type $params
      * @return type
      */
-    public function hookDisplayPaymentReturn($params) 
+    public function hookDisplayPaymentReturn($params)
     {
         if (!$this->active) {
             return;
         }
-        
+
         $this->smarty->assign(
             $this->getTemplateVars()
-            );
+        );
         return $this->fetch('module:vanillapay/views/templates/hook/payment_return.tpl');
     }
 
@@ -177,11 +177,13 @@ class vanillapay extends PaymentModule
             Configuration::updateValue('ARYARYNET_CLIENT_SECRET', trim(Tools::getValue('ARYARYNET_CLIENT_SECRET')));
             Configuration::updateValue('ARYARYNET_CLIENT_PRIVATE_KEY', trim(Tools::getValue('ARYARYNET_CLIENT_PRIVATE_KEY')));
             Configuration::updateValue('ARYARYNET_CLIENT_PUBLIC_KEY', trim(Tools::getValue('ARYARYNET_CLIENT_PUBLIC_KEY')));
+            Configuration::updateValue('ARYARYNET_SITE_URL', trim(Tools::getValue('ARYARYNET_SITE_URL')));
+            Configuration::updateValue('ARYARYNET_HEXA', trim(Tools::getValue('ARYARYNET_HEXA')));
         }
         return $this->displayConfirmation($this->l('Configuration updated with success'));
     }
 
-     /**
+    /**
      * Formulaire de configuration admin
      */
     public function renderForm()
@@ -194,33 +196,58 @@ class vanillapay extends PaymentModule
                 ],
                 'description' => $this->l('Sample configuration form'),
                 'input' => [
-                   [
+                    [
                         'type' => 'text',
-                        'label' => $this->l('client id'),
+                        'label' => $this->l('Client Id'),
                         'name' => 'ARYARYNET_CLIENT_ID',
                         'required' => true,
                         'empty_message' => $this->l('Please fill the payment api url'),
-                   ],
-                   [
+                    ],
+                    [
                         'type' => 'text',
-                        'label' => $this->l('client secret'),
+                        'label' => $this->l('Client Secret'),
                         'name' => 'ARYARYNET_CLIENT_SECRET',
                         'required' => true,
                         'empty_message' => $this->l('Please fill the payment api success url'),
                     ],
                     [
                         'type' => 'text',
-                        'label' => $this->l('client private clé'),
+                        'label' => $this->l('Client Private Key'),
                         'name' => 'ARYARYNET_CLIENT_PRIVATE_KEY',
                         'required' => true,
                         'empty_message' => $this->l('Please fill the payment api error url'),
                     ],
                     [
                         'type' => 'text',
-                        'label' => $this->l('clé public client'),
+                        'label' => $this->l('Client Public Key'),
                         'name' => 'ARYARYNET_CLIENT_PUBLIC_KEY',
                         'required' => true,
                         'empty_message' => $this->l('Please fill the payment api error url'),
+                    ],
+                    [
+                        'type' => 'text',
+                        'label' => $this->l('Site URL'),
+                        'name' => 'ARYARYNET_SITE_URL',
+                        'required' => true,
+                        'empty_message' => $this->l('Please fill the payment api error url'),
+                    ],
+                    [
+                        'type' => 'switch',
+                        'label' => $this->l('Type Hexa'),
+                        'name' => 'ARYARYNET_HEXA',
+                        'is_bool' => true,
+                        'values' => array(
+                            array(
+                                'id' => 'include_category_product_on',
+                                'value' => 1,
+                                'label' => $this->l('Enabled')
+                            ),
+                            array(
+                                'id' => 'include_category_product_off',
+                                'value' => 0,
+                                'label' => $this->l('Disabled')
+                            )
+                        )
                     ],
                 ],
                 'submit' => [
@@ -228,7 +255,7 @@ class vanillapay extends PaymentModule
                     'class' => 'button btn btn-default pull-right',
                 ],
             ],
-            ];
+        ];
 
         $helper = new HelperForm();
         $helper->show_toolbar = false;
@@ -258,6 +285,8 @@ class vanillapay extends PaymentModule
             'ARYARYNET_CLIENT_SECRET' => Tools::getValue('ARYARYNET_CLIENT_SECRET', Configuration::get('ARYARYNET_CLIENT_SECRET')),
             'ARYARYNET_CLIENT_PRIVATE_KEY' => Tools::getValue('ARYARYNET_CLIENT_PRIVATE_KEY', Configuration::get('ARYARYNET_CLIENT_PRIVATE_KEY')),
             'ARYARYNET_CLIENT_PUBLIC_KEY' => Tools::getValue('ARYARYNET_CLIENT_PUBLIC_KEY', Configuration::get('ARYARYNET_CLIENT_PUBLIC_KEY')),
+            'ARYARYNET_SITE_URL' => Tools::getValue('ARYARYNET_SITE_URL', Configuration::get('ARYARYNET_SITE_URL')),
+            'ARYARYNET_HEXA' => Tools::getValue('ARYARYNET_HEXA', Configuration::get('ARYARYNET_HEXA')),
         ];
     }
 
