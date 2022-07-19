@@ -13502,3 +13502,21 @@ p.alert-success {
   padding: 10px 0; }
 
 /*# sourceMappingURL=custom.css.map */
+
+.block-categories .category-top-menu .category-sub-menu li a {
+    color: #13456d;
+}
+
+.block-categories .category-top-menu .category-sub-menu li a:hover {
+    color: #f49a0e;
+}
+
+.block-categories {
+    color: #13456d;
+    border : 1px solid #13456d;
+    background: white;
+}
+
+.block-categories .category-top-menu a.h6 {
+    color: #13456d;
+}
